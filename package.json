@@ -1,0 +1,16 @@
+{
+  "name": "pokerhand",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.5.2"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "test": "jest"
+  }
+}
