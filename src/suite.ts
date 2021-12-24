@@ -58,6 +58,11 @@ export class Suite {
         return errors;
     }
 
+    describe(name: string, fn: (t: Suite) => void): this {
+        this.nestedSuites.push(new Suite(name, fn, this))
+        return this;
+    }
+
     runAllTests(): TestReport {
 
         // execute the setup block
@@ -100,11 +105,6 @@ export class Suite {
             results,
             nestedSuitesResults
         )
-    }
-
-    describe(name: string, fn: (t: Suite) => void): this {
-        this.nestedSuites.push(new Suite(name, fn, this))
-        return this;
     }
 }
 
