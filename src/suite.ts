@@ -1,4 +1,4 @@
-import {Result} from "./result"
+import {createResult, Result} from "./result"
 import {AssertError} from "./asserts"
 import {TestReport} from "./test-report"
 
@@ -89,7 +89,7 @@ export class Suite {
 
             const errors = [...error, ...afterEachErrors, ...parentsAfterEachErrors]
 
-            return Suite.toResult(t.name, errors, fail)
+            return createResult(t.name, errors, fail)
         })
 
         // repeat again for nested suites
@@ -100,16 +100,6 @@ export class Suite {
             results,
             nestedSuitesResults
         )
-    }
-
-    private static toResult(testName: string, errors: unknown[], fail: AssertError | null): Result {
-        if (errors.length > 0) {
-            return {name: testName, tagged: 'exception', reasons: errors}
-        } else if (fail) {
-            return {name: testName, tagged: 'failed', reasons: [fail]}
-        } else {
-            return {name: testName, tagged: 'passed'}
-        }
     }
 
     describe(name: string, fn: (t: Suite) => void): this {
