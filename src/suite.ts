@@ -60,18 +60,20 @@ export class Suite {
 
     runAllTests(): TestReport {
 
-        // execute setup block
+        // execute the setup block
         this.fn(this);
 
         const results: Result[] = this.testCases.map((t) => {
-            // all before each
+
             let error: unknown[] = [];
-            let fail = null;
+            let fail: AssertError | null = null;
             try {
+
+                // execute all before each blocks
                 this.parentSuite?.runAllBeforeEach()
                 this.runAllBeforeEach()
 
-                // execute test
+                // execute the test
                 t.fn()
             } catch (e) {
                 if (e instanceof AssertError) {
@@ -81,19 +83,13 @@ export class Suite {
                 }
             }
 
-            // all after each
+            // execute all after each blocks
             const afterEachErrors = this.runAllAfterEach()
             const parentsAfterEachErrors = this.parentSuite?.runAllAfterEach() || []
 
             const errors = [...error, ...afterEachErrors, ...parentsAfterEachErrors]
 
-            if (errors.length > 0) {
-                return { name: t.name, tagged: 'exception', reasons: errors }
-            } else if (fail) {
-                return {name: t.name, tagged: 'failed', reasons: [fail] }
-            } else  {
-                return { name: t.name, tagged: 'passed' }
-            }
+            return Suite.toResult(t.name, errors, fail)
         })
 
         // repeat again for nested suites
@@ -104,6 +100,16 @@ export class Suite {
             results,
             nestedSuitesResults
         )
+    }
+
+    private static toResult(testName: string, errors: unknown[], fail: AssertError | null): Result {
+        if (errors.length > 0) {
+            return {name: testName, tagged: 'exception', reasons: errors}
+        } else if (fail) {
+            return {name: testName, tagged: 'failed', reasons: [fail]}
+        } else {
+            return {name: testName, tagged: 'passed'}
+        }
     }
 
     describe(name: string, fn: (t: Suite) => void): this {

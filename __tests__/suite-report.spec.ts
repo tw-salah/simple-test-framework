@@ -1,9 +1,9 @@
-import {Spec} from "../src/spec"
+import {Spek} from "../src/spek"
 import {AssertError} from "../src/asserts"
 
 describe('test suite reports', () => {
     test('passed, failed, error', () => {
-        const spec = new Spec('my describe', (t) => {
+        const spec = new Spek('my describe', (t) => {
 
             t.test('test 1', () => {
             })
@@ -29,7 +29,7 @@ describe('test suite reports', () => {
     })
 
     test('nested suite', () => {
-        const spec = new Spec('my describe', (t) => {
+        const spec = new Spek('my describe', (t) => {
 
             t.test('test 1', () => {
             })

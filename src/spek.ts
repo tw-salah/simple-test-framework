@@ -1,6 +1,6 @@
 import {Suite} from "./suite"
 
-export class Spec {
+export class Spek {
     private readonly name: string;
     private readonly fn: (t: Suite) => void;
 

@@ -1,10 +1,10 @@
-import {Spec} from "../src/spec"
+import {Spek} from "../src/spek"
 
 describe('Spec', () => {
     test('using spec', () => {
 
         let x: string[] = []
-        const spec = new Spec('describe', (t) => {
+        const spec = new Spek('describe', (t) => {
             x = ['init']
             t.beforeEach(() => {
                 x.push('before each')
@@ -34,7 +34,7 @@ describe('Spec', () => {
     test('nested spec', () => {
 
         let x: string[] = []
-        const spec = new Spec('describe', (t) => {
+        const spec = new Spek('describe', (t) => {
             x = ['init']
             t.beforeEach(() => {
                 x.push('before each')
@@ -84,7 +84,7 @@ describe('Spec', () => {
     describe('error handling', () => {
         test('error in before each, skips test but not after each', () => {
             let x: string[] = []
-            const spec = new Spec('describe', (t) => {
+            const spec = new Spek('describe', (t) => {
                 x = ['init']
                 t.beforeEach(() => {
                     x.push('before each')
@@ -112,7 +112,7 @@ describe('Spec', () => {
         test('error in test, after each still executes', () => {
 
             let x: string[] = []
-            const spec = new Spec('describe', (t) => {
+            const spec = new Spek('describe', (t) => {
                 x = ['init']
                 t.beforeEach(() => {
                     x.push('before each')
@@ -140,7 +140,7 @@ describe('Spec', () => {
         test('error in after each, other after each block still executes', () => {
 
             let x: string[] = []
-            const spec = new Spec('describe', (t) => {
+            const spec = new Spek('describe', (t) => {
                 x = ['init']
                 t.beforeEach(() => {
                     x.push('before each')
