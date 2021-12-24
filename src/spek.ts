@@ -4,7 +4,7 @@ export class Spek {
     private readonly name: string;
     private readonly fn: (t: Suite) => void;
 
-    constructor(name: string, fn: (t: Suite) => void) {
+    constructor(name: string, fn: (t: Suite) => unknown) {
         this.name = name;
         this.fn = fn;
     }

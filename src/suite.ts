@@ -11,8 +11,8 @@ export class Suite {
     private readonly testCases: TestCase[];
     private readonly name: string;
     private readonly fn: (t: Suite) => void;
-    private readonly beforeEachFn: [() => void]
-    private readonly afterEachFn: [() => void]
+    private readonly beforeEachFn: [() => unknown]
+    private readonly afterEachFn: [() => unknown]
     private readonly nestedSuites: Suite[];
     private readonly parentSuite: Suite | null;
 
@@ -26,19 +26,24 @@ export class Suite {
         this.parentSuite = parent;
     }
 
-    test(name: string, fn: () => void): this {
+    test(name: string, fn: () => unknown): this {
         this.testCases.push({ name, fn });
         return this;
     }
 
-    beforeEach(fn: () => void): this {
+    beforeEach(fn: () => unknown): this {
         this.beforeEachFn.push(fn);
         return this
     }
 
-    afterEach(fn: () => void): this {
+    afterEach(fn: () => unknown): this {
         this.afterEachFn.push(fn);
         return this
+    }
+
+    describe(name: string, fn: (t: Suite) => unknown): this {
+        this.nestedSuites.push(new Suite(name, fn, this))
+        return this;
     }
 
     private runAllBeforeEach() {
@@ -56,11 +61,6 @@ export class Suite {
         })
 
         return errors;
-    }
-
-    describe(name: string, fn: (t: Suite) => void): this {
-        this.nestedSuites.push(new Suite(name, fn, this))
-        return this;
     }
 
     runAllTests(): TestReport {
