@@ -1,6 +1,6 @@
 import {Spek} from "../src/spek"
 
-describe('Spec', () => {
+describe('Spek', () => {
     test('using spec', () => {
 
         let x: string[] = []
