@@ -8,7 +8,7 @@ type TestCase = {
 }
 
 export class Suite {
-    testCases: TestCase[];
+    private readonly testCases: TestCase[];
     private readonly name: string;
     private readonly fn: (t: Suite) => void;
     private readonly beforeEachFn: [() => void]
