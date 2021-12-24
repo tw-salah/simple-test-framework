@@ -13,8 +13,8 @@ export class Suite {
     private readonly fn: (t: Suite) => void;
     private readonly beforeEachFn: [() => void]
     private readonly afterEachFn: [() => void]
-    private nestedSuites: Suite[];
-    private parentSuite: Suite | null;
+    private readonly nestedSuites: Suite[];
+    private readonly parentSuite: Suite | null;
 
     constructor(name: string, fn: (t: Suite) => void, parent: Suite | null = null) {
         this.name = name;
