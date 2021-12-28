@@ -46,14 +46,14 @@ export class Suite {
         return this;
     }
 
-    private runAllBeforeEach(suit: Suite | null) {
+    private static runAllBeforeEach(suit: Suite | null) {
         if (suit !== null) {
             this.runAllBeforeEach(suit.parentSuite)
             suit.beforeEachFn.forEach(fn => fn())
         }
     }
 
-    private runAllAfterEach(suite: Suite | null, errors: unknown[] = []): unknown[] {
+    private static runAllAfterEach(suite: Suite | null, errors: unknown[] = []): unknown[] {
 
         if (suite !== null) {
             suite.afterEachFn.forEach(fn => {
@@ -82,7 +82,7 @@ export class Suite {
             try {
 
                 // execute all before each blocks
-                this.runAllBeforeEach(this)
+                Suite.runAllBeforeEach(this)
                 // execute the test
                 t.fn()
             } catch (e) {
@@ -94,7 +94,7 @@ export class Suite {
             }
 
             // execute all after each blocks
-            this.runAllAfterEach(this, errors)
+            Suite.runAllAfterEach(this, errors)
             return createResult(t.name, errors, fails)
         })
 
