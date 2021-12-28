@@ -1,41 +1,11 @@
 import {Spek} from "../src/spek"
 
 describe('Spek', () => {
-    test('using spec', () => {
-
-        let x: string[] = []
-        const spec = new Spek('describe', (t) => {
-            x = ['init']
-            t.beforeEach(() => {
-                x.push('before each')
-            })
-
-            t.test('test 1', () => {
-                x.push('test 1')
-            })
-
-            t.test('test 2', () => {
-                x.push('test 2')
-            })
-
-            t.afterEach(() => {
-                x.push('after each')
-            })
-        })
-
-        spec.runAllTests()
-        expect(x).toEqual([
-            'init',
-            'before each', 'test 1', 'after each',
-            'before each', 'test 2', 'after each'
-        ])
-    })
-
     test('nested spec', () => {
 
-        let x: string[] = []
+        const x: string[] = []
         const spec = new Spek('describe', (t) => {
-            x = ['init']
+            x.push('init')
             t.beforeEach(() => {
                 x.push('before each')
             })
@@ -104,9 +74,9 @@ describe('Spek', () => {
 
     describe('error handling', () => {
         test('error in before each, skips test but not after each', () => {
-            let x: string[] = []
+            const x: string[] = []
             const spec = new Spek('describe', (t) => {
-                x = ['init']
+                x.push('init')
                 t.beforeEach(() => {
                     x.push('before each')
                     throw new Error('something bad happened')
@@ -132,9 +102,9 @@ describe('Spek', () => {
 
         test('error in test, after each still executes', () => {
 
-            let x: string[] = []
+            const x: string[] = []
             const spec = new Spek('describe', (t) => {
-                x = ['init']
+                x.push('init')
                 t.beforeEach(() => {
                     x.push('before each')
                 })
