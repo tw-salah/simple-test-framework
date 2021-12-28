@@ -68,6 +68,25 @@ describe('Spek', () => {
                 t.afterEach(() => {
                     x.push('nested after each')
                 })
+
+                t.describe('nested nested description', (t) => {
+                    t.beforeEach(() => {
+                        x.push('nested nested before each')
+                    })
+
+                    t.test('nested nested test 1', () => {
+                        x.push('nested nested test 1')
+                    })
+
+                    t.test('nested nested test 2', () => {
+                        x.push('nested nested test 2')
+                    })
+
+                    t.afterEach(() => {
+                        x.push('nested nested after each')
+                    })
+                })
+
             })
         })
 
@@ -78,6 +97,8 @@ describe('Spek', () => {
             'before each', 'test 2', 'after each',
             'before each', 'nested before each', 'nested test 1', 'nested after each', 'after each',
             'before each', 'nested before each', 'nested test 2', 'nested after each', 'after each',
+            'before each', 'nested before each', 'nested nested before each', 'nested nested test 1', 'nested nested after each', 'nested after each', 'after each',
+            'before each', 'nested before each', 'nested nested before each', 'nested nested test 2', 'nested nested after each', 'nested after each', 'after each',
         ])
     })
 

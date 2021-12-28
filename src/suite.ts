@@ -46,19 +46,26 @@ export class Suite {
         return this;
     }
 
-    private runAllBeforeEach() {
-        this.beforeEachFn.forEach(fn => fn())
+    private runAllBeforeEach(suit: Suite | null) {
+        if (suit !== null) {
+            this.runAllBeforeEach(suit.parentSuite)
+            suit.beforeEachFn.forEach(fn => fn())
+        }
     }
 
-    private runAllAfterEach(): unknown[] {
-        let errors: unknown[] = []
-        this.afterEachFn.forEach(fn => {
-            try {
-                fn()
-            } catch (e) {
-                errors.push(e)
-            }
-        })
+    private runAllAfterEach(suite: Suite | null, errors: unknown[] = []): unknown[] {
+
+        if (suite !== null) {
+            suite.afterEachFn.forEach(fn => {
+                try {
+                    fn()
+                } catch (e) {
+                    errors.push(e)
+                }
+            })
+
+            this.runAllAfterEach(suite.parentSuite, errors)
+        }
 
         return errors;
     }
@@ -70,31 +77,25 @@ export class Suite {
 
         const results: Result[] = this.testCases.map((t) => {
 
-            let error: unknown[] = [];
-            let fail: AssertError | null = null;
+            let errors: unknown[] = [];
+            let fails: AssertError[] = [];
             try {
 
                 // execute all before each blocks
-                this.parentSuite?.runAllBeforeEach()
-                this.runAllBeforeEach()
-
+                this.runAllBeforeEach(this)
                 // execute the test
                 t.fn()
             } catch (e) {
                 if (e instanceof AssertError) {
-                    fail = e;
+                    fails = [e];
                 } else {
-                    error = [e];
+                    errors = [e];
                 }
             }
 
             // execute all after each blocks
-            const afterEachErrors = this.runAllAfterEach()
-            const parentsAfterEachErrors = this.parentSuite?.runAllAfterEach() || []
-
-            const errors = [...error, ...afterEachErrors, ...parentsAfterEachErrors]
-
-            return createResult(t.name, errors, fail)
+            this.runAllAfterEach(this, errors)
+            return createResult(t.name, errors, fails)
         })
 
         // repeat again for nested suites

@@ -19,11 +19,11 @@ export type Exception = {
 
 export type Result = Pass | Failed | Exception
 
-export const createResult = (testName: string, errors: unknown[], fail: AssertError | null): Result => {
+export const createResult = (testName: string, errors: unknown[], fail: AssertError[]): Result => {
     if (errors.length > 0) {
         return {name: testName, tagged: 'exception', reasons: errors}
-    } else if (fail) {
-        return {name: testName, tagged: 'failed', reasons: [fail]}
+    } else if (fail.length > 0) {
+        return {name: testName, tagged: 'failed', reasons: fail}
     } else {
         return {name: testName, tagged: 'passed'}
     }
